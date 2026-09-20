@@ -1,0 +1,48 @@
+<div class="relative overflow-hidden rounded-2xl p-6 bg-linear-to-r from-indigo-50 via-violet-50 to-emerald-50 border border-gray-100">
+
+  <div class="flex items-start justify-between">
+    <div>
+      <div class="flex items-center gap-2 text-sm mb-2">
+        <span class="text-amber-600 font-medium">Sprint Focus</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <h2 class="text-2xl font-bold text-gray-900">My Tasks</h2>
+        <span class="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
+          {{listServicesService.listCount()}} tasks total
+        </span>
+      </div>
+    </div>
+
+    <div class="hidden sm:flex items-center gap-1 bg-white/60 rounded-lg p-1">
+      <button class="px-3 py-1.5 rounded-md bg-white shadow-sm text-sm font-medium text-gray-800">
+        All <span class="text-gray-500">{{listServicesService.listCount()}}</span>
+      </button>
+      <button class="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800">
+        Pending <span class="text-amber-600">{{listServicesService.listData().filter(t=> !t.completed ).length}}</span>
+      </button>
+      <button class="px-3 py-1.5 rounded-md text-sm font-medium text-gray-600 hover:text-gray-800">
+        Completed <span class="text-emerald-600">{{listServicesService.listData().filter(t=> t.completed ).length}}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-5 bg-white rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2 text-sm text-gray-700">
+        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+        <span>Execution Velocity</span>
+      </div>
+<span class="text-sm font-medium text-emerald-700">
+  {{listServicesService.listData().filter(t=> t.completed ).length}} of {{listServicesService.listCount()}} completed
+  {{ listServicesService.listCount() === 0 ? 0 : math.round((listServicesService.listData().filter(t => t.completed).length / listServicesService.listCount()) * 100) }}%
+</span>    </div>
+    <div class="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+      <div
+        class="h-full rounded-full bg-emerald-700 transition-all"
+        [style.width.%]="listServicesService.listCount() === 0 ? 0 : math.round((listServicesService.listData().filter(t => t.completed).length / listServicesService.listCount()) * 100)">
+      </div>
+    </div>
+  </div>
+
+</div>

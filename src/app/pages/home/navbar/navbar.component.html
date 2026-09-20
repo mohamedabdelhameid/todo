@@ -1,0 +1,25 @@
+<nav class="bg-white fixed w-full z-20 top-0 inset-s-0 border-b border-gray-100">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+    
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-md bg-emerald-800 flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <span class="font-semibold text-emerald-900 text-base">Todo List</span>
+      </div>
+    </div>
+
+    <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-sm">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+      <span class="text-emerald-900 font-medium">{{listServicesService.listCount()}} Tasks</span>
+      <span class="text-emerald-300">•</span>
+      <span class="text-amber-600 font-medium">{{listServicesService.listData().filter(t=> !t.completed ).length}} Pending</span>
+      <span class="text-emerald-300">•</span>
+      <span class="text-emerald-700 font-medium">{{listServicesService.listData().filter(t=> t.completed ).length}} Completed</span>
+    </div>
+
+  </div>
+</nav>
