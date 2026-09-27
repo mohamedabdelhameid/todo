@@ -17,6 +17,10 @@ export class NewTaskComponent {
   todoId2 : WritableSignal<string> = signal('');
   addLoading : WritableSignal<boolean> = signal(false);
 
+  ngOnInit() : void{
+    this.getList();
+  }
+
 
   getList(): void {
       this.listServicesService.getTodos().subscribe({
