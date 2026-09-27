@@ -164,11 +164,19 @@
 
       <input
         type="text"
-        [(ngModel)]="editedTitle"
+        [formControl]="editedTitle"
         [disabled]="modifyLoadingId() !== null"
-        class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 outline-none focus:border-emerald-600 text-sm text-gray-700 disabled:opacity-50"
+        class="w-full px-4 py-3 rounded-xl bg-gray-50 border outline-none text-sm text-gray-700 disabled:opacity-50"
         placeholder="Task title..."
+        [ngClass]="editedTitle.invalid && editedTitle.touched ? 'border-red-500' : 'border-emerald-600'"
       />
+      <div>
+  @if (editedTitle.hasError('required') && editedTitle.touched) {
+    <p class="text-red-500">Please write the task you want</p>
+  } @else if (editedTitle.hasError('minlength') && editedTitle.touched) {
+    <p class="text-red-500">Task must have at least 3 characters</p>
+  }
+</div>
 
       <div class="flex items-center justify-end gap-3 mt-5">
         <button
@@ -180,6 +188,7 @@
         <button
           class="px-5 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white text-sm font-medium cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
           [disabled]="modifyLoadingId() !== null"
+          [disabled]="editedTitle.invalid"
           (click)="saveEdit()">
           @if (modifyLoadingId() !== null) {
             <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">

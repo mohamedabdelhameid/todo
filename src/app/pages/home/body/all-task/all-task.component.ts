@@ -2,12 +2,13 @@ import { Component, EventEmitter, inject, Output, signal, WritableSignal } from 
 import { Subscription } from 'rxjs';
 import { Ilist } from '../../../../interfaces/listInterfaces/ilist.interface';
 import { ListServicesService } from '../../../../services/list-services.service';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ToastrServices } from '../../../../services/toastrServices/toastr.services';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-all-task',
-  imports: [FormsModule],
+  imports: [FormsModule, ReactiveFormsModule, NgClass],
   templateUrl: './all-task.component.html',
   styleUrl: './all-task.component.css',
 })
@@ -17,13 +18,14 @@ export class AllTaskComponent {
   todoStatus: WritableSignal<boolean> = signal(false);
   @Output() dataEvent = new EventEmitter<string>();
   isEditModalOpen: boolean = false;
-  editedTitle: string = '';
+  // editedTitle: string = '';
   private editingTodoId: string = '';
-
-  // Per-task loading trackers (id of the task currently being processed, or null)
   statusLoadingId: WritableSignal<string | null> = signal(null);
   deleteLoadingId: WritableSignal<string | null> = signal(null);
   modifyLoadingId: WritableSignal<string | null> = signal(null);
+
+  editedTitle = new FormControl( '',[Validators.required , Validators.minLength(3)]);
+
 
   private readonly toastr = inject(ToastrServices);
 
@@ -103,27 +105,27 @@ export class AllTaskComponent {
 
   openEditModal(todo: Ilist): void {
     this.editingTodoId = todo._id;
-    this.editedTitle = todo.title;
+    this.editedTitle.setValue(todo.title);
     this.isEditModalOpen = true;
   }
 
   closeEditModal(): void {
     this.isEditModalOpen = false;
-    this.editedTitle = '';
+    this.editedTitle.setValue('');
     this.editingTodoId = '';
   }
 
   saveEdit(): void {
-    if (!this.editedTitle.trim()) {
+    if (!this.editedTitle.value?.trim()) {
       return;
     }
 
     this.modifyLoadingId.set(this.editingTodoId);
-
-    this.listServicesService.getTodo(this.editingTodoId).subscribe({
+    if(this.editedTitle.valid){
+      this.listServicesService.getTodo(this.editingTodoId).subscribe({
       next: (res: Ilist) => {
         this.todoStatus.set(res.completed);
-        this.listServicesService.updateContent(this.editingTodoId, { title: this.editedTitle, completed: false }).subscribe({
+        this.listServicesService.updateContent(this.editingTodoId, { title: this.editedTitle.value!, completed: false }).subscribe({
           next: (res) => {
             this.modifyLoadingId.set(null);
             this.getList();
@@ -147,7 +149,8 @@ export class AllTaskComponent {
       error: (err) => {
         this.modifyLoadingId.set(null);
       },
-    });
+      });
+    }
   }
 
   ngOnDestroy(): void {

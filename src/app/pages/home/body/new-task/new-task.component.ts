@@ -3,10 +3,11 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ListServicesService } from '../../../../services/list-services.service';
 import { Ilist } from '../../../../interfaces/listInterfaces/ilist.interface';
 import { ToastrServices } from '../../../../services/toastrServices/toastr.services';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-new-task',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgClass],
   templateUrl: './new-task.component.html',
   styleUrl: './new-task.component.css',
 })
@@ -62,7 +63,11 @@ export class NewTaskComponent {
       }
       })
     } else{
-      
+      this.toastr.error(`added failed`, `new task`, {
+            progressBar: true,
+            progressAnimation: 'decreasing',
+            timeOut: 3000,
+          });
     }
   }
 
